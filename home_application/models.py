@@ -13,7 +13,7 @@ from django.db import models
 
 
 class Template(models.Model):
-    name = models.TextField(verbose_name="模板名称")
+    name = models.TextField(verbose_name="模板名称", unique=True)
     type = models.TextField(verbose_name="模板类型")
     # 变更发布  扩容类  上线类 下架类  例行维护
     bk_biz_id = models.TextField(verbose_name="业务ID")
@@ -35,8 +35,13 @@ class Template(models.Model):
 class Task(models.Model):
     key = models.IntegerField(verbose_name="任务ID")
     status = models.TextField(verbose_name="状态", blank=True, null=True)
-    template = models.ForeignKey(to=Template)
+    template_name = models.TextField(verbose_name="模板名称", blank=True, null=True)
     other = models.TextField(verbose_name="备注", blank=True, null=True)
+    create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True, blank=True, null=True)
+    change_time = models.DateTimeField(verbose_name="更新时间", auto_now=True, blank=True, null=True)
+    operators = models.TextField(verbose_name="可操作者", blank=True, null=True)
+    creator = models.TextField(verbose_name="创建者", blank=True, null=True)
+
     objects = models.Manager()
 
     class Meta:
