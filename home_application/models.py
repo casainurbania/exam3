@@ -24,7 +24,7 @@ class Template(models.Model):
     change_time = models.DateTimeField(verbose_name="更新时间", auto_now=True, blank=True, null=True)
     file = models.TextField(verbose_name="文件", blank=True, null=True)
     other = models.TextField(verbose_name="备注", blank=True, null=True)
-
+    objects = models.Manager()
 
     class Meta:
         db_table = 'saas_template'
@@ -37,6 +37,7 @@ class Task(models.Model):
     status = models.TextField(verbose_name="状态", blank=True, null=True)
     template = models.ForeignKey(to=Template)
     other = models.TextField(verbose_name="备注", blank=True, null=True)
+    objects = models.Manager()
 
     class Meta:
         db_table = 'saas_task'
