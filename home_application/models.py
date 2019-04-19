@@ -23,7 +23,7 @@ class Template(models.Model):
     create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True, blank=True, null=True)
     change_time = models.DateTimeField(verbose_name="更新时间", auto_now=True, blank=True, null=True)
     file = models.TextField(verbose_name="文件", blank=True, null=True)
-    others = models.TextField(verbose_name="备注", blank=True, null=True)
+    other = models.TextField(verbose_name="备注", blank=True, null=True)
 
 
     class Meta:
@@ -33,10 +33,10 @@ class Template(models.Model):
 
 
 class Task(models.Model):
-    id = models.IntegerField(verbose_name="任务ID", blank=True, null=True )
+    key = models.IntegerField(verbose_name="任务ID")
     status = models.TextField(verbose_name="状态", blank=True, null=True)
-    template = models.ForeignKey(Template, blank=True, null=True)
-    content = models.TextField(verbose_name="状态", blank=True, null=True)
+    template = models.ForeignKey(to=Template)
+    other = models.TextField(verbose_name="备注", blank=True, null=True)
 
     class Meta:
         db_table = 'saas_task'
