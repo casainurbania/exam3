@@ -40,6 +40,7 @@ class Task(models.Model):
     task_id = models.IntegerField(verbose_name="任务ID")
     content = models.TextField(verbose_name="详情", blank=True)
     status = models.TextField(verbose_name="状态", blank=True, null=True)
+    # 未操作,操作中,已完成
     template = models.ForeignKey(Template)
     create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True, )
     change_time = models.DateTimeField(verbose_name="更新时间", auto_now=True, blank=True, null=True)

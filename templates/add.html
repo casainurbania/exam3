@@ -76,22 +76,22 @@
         <div class="king-layout2-main mt15" style="width:1200px;">
 
 
-<form class="form-horizontal" action="index.html" id="form4_demo1" novalidate="novalidate" id="add">
+<form class="form-horizontal" id="form4_demo1" novalidate="novalidate" id="add">
 
         <div class="form-group">
         <label class="control-label col-sm-2" for="validation_select">业务名称</label>
         <div class="col-sm-7">
-            <select class="form-control" id="validation_select" name="validation_select" v-model="bk_biz_id">
-                        <option v-for="biz in biz_list" :value="biz.bk_biz_id"  >{{ biz.bk_biz_name }}</option>
+            <select class="form-control" id="validation_select" name="validation_select" v-model="template.bk_biz_name">
+                        <option v-for="biz in biz_list" :value="biz.bk_biz_name"  >{{ biz.bk_biz_name }}</option>
             </select>
 
         </div>
     </div>
 
         <div class="form-group">
-        <label class="control-label col-sm-2" for="validation_select">内置类型</label>
+        <label class="control-label col-sm-2" for="validation_select">模板类型</label>
         <div class="col-sm-7">
-                <select name="" id="" class="form-control bk-valign-top" v-model="type">
+                <select name="" id="" class="form-control bk-valign-top" v-model="template.type">
                     <option value="变更发布">变更发布</option>
                     <option value="扩容类">扩容类</option>
                     <option value="上线类">上线类</option>
@@ -105,14 +105,14 @@
     <div class="form-group">
         <label class="control-label col-sm-2" for="validation_name">模板名称</label>
         <div class="col-sm-7">
-            <input class="form-control" id="validation_name" name="validation_name" placeholder="用户名" type="text"  v-model="username">
+            <input class="form-control" placeholder="模板名" type="text"  v-model="template.name">
         </div>
     </div>
 
       <div class="form-group">
         <label class="control-label col-sm-2" for="validation_name">上传模板文件</label>
         <div class="col-sm-7">
-            <input class="form-control" id="validation_name" name="validation_name"  type="file"  v-model="file">
+            <input class="form-control" id="validation_name" name="validation_name"  type="file"  v-model="template.file">
         </div>
     </div>
 
@@ -125,9 +125,9 @@
     <div class="form-group">
         <label class="control-label col-sm-2" for="validation_select"></label>
         <div class="col-sm-7">
-            <a href="javascript:history.back(-1)"><button class="king-btn king-info" type="submit" id="btn-validate">返回</button> </a>
-            <button class="king-btn king-info" type="submit" id="btn-validate">预览</button>
-             <button class="king-btn mr10  king-success" type="submit" id="btn-validate" @click="add_template">确认提交</button>
+            <a href=""><button class="king-btn king-info" type="submit" >返回</button> </a>
+            <button class="king-btn king-info" type="submit" >预览</button>
+             <button class="king-btn mr10  king-success" type="submit" @click="add_template">确认提交</button>
         </div>
 
     </div>
@@ -144,12 +144,13 @@
         el: "#home",
 
         data: {
-            bk_biz_id: null,
-            status: null,
-            creator: "全部",
-            name: null,
-            id: null,
-            file:null,
+            template:{
+                bk_biz_name: "",
+                type:"",
+                name: "",
+                file:"",
+            },
+
             // 预加载
             template_list:[],
             biz_list : [],
@@ -173,21 +174,7 @@
                 })
             },
 
-            get_opt_list() {
-                var vm = this;
-                $.ajax({
-                    type: "POST",
-                    url: site_url + "api/get_opt_list",
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.result) {
-                            vm.opt_list = data.data;
-                        } else {
-                            alert(data.message)
-                        }
-                    }
-                })
-            },
+
 
             add_template() {
                  var vm = this;
@@ -195,12 +182,16 @@
                     type: "POST",
                     url: site_url + "api/add_template",
                     dataType: "json",
-                    data:{
-                        "bk_biz_id":vm.bk_biz_id,
-                        "type": vm.type,
-                        "name":vm.name,
-                    },
+                    data: vm.t,
 
+                    success: function (data) {
+                        if (data.result){
+                            alert("载入成功")
+                        }
+                        else{
+                            alert(data.message)
+                        }
+                    }
                 })
             },
         },
