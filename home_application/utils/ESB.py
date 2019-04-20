@@ -7,7 +7,6 @@ from blueking.component.client import ComponentClient
 from home_application.models import *
 
 
-
 class ESBApi(object):
 
     def __init__(self, param):
