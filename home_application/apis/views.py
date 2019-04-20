@@ -15,10 +15,7 @@ from home_application.utils.ESB import ESBApi, ESBComponentApi
 import base64
 import datetime, time
 
-BIZ_MAP = {
-    "2": "蓝鲸",
-    "3": "考试用业务"
-}
+
 
 
 # 获取全部业务

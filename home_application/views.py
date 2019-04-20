@@ -28,12 +28,12 @@ def test(req):
 
 # 主页面
 def home(req):
-    return render_mako_context(req, '/home.html', )
+    return render_mako_context(req, '/home_application/home.html', )
 
 
 def template(req):
-    return render_mako_context(req, '/template.html', )
+    return render_mako_context(req, '/home_application/template.html', )
 
 
 def add(req):
-    return render_mako_context(req, '/add.html')
+    return render_mako_context(req, '/home_application/add.html')
