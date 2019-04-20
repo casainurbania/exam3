@@ -76,7 +76,7 @@
         <div class="king-layout2-main mt15" style="width:1200px;">
 
 
-<form class="form-horizontal" id="form4_demo1" novalidate="novalidate" id="add">
+<div class="form-horizontal" id="form4_demo1" id="add">
 
         <div class="form-group">
         <label class="control-label col-sm-2" >业务名称</label>
@@ -124,13 +124,13 @@
     <div class="form-group">
         <label class="control-label col-sm-2" ></label>
         <div class="col-sm-7">
-            <button class="king-btn king-info" type="submit" @click="jump_back">返回</button>
+            <a href="javascript:history.go(-1)"><button class="king-btn king-info" type="submit" @click="jump_back">返回</button></a>
             <button class="king-btn king-info" type="submit" >预览</button>
              <button class="king-btn mr10  king-success" type="submit" @click="add_template">确认提交</button>
         </div>
 
     </div>
-</form>
+</div>
 
 
             <!-- 设置面板End -->
@@ -194,9 +194,6 @@
                 })
             },
 
-            jump_back() {
-                window.location.href= site_url
-            }
         },
 
 
