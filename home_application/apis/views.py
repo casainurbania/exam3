@@ -9,7 +9,7 @@ from django.core import serializers
 from account.decorators import login_exempt
 from account.models import BkUser
 from common.mymako import render_mako_context, render_json
-from conf.default import APP_ID
+from conf.default import APP_ID, UPLOAD_PATH
 from home_application.celery_tasks import *
 from home_application.models import *
 from home_application.models import *
@@ -84,7 +84,7 @@ def add_template(req):
 
         print ">" * 100
         print obj.name
-        save_path = os.path.join('./home_application/upload', obj.name)
+        save_path = os.path.join(UPLOAD_PATH, obj.name)
         print [t.file for t in Template.objects.all()]
         if save_path not in [t.file for t in Template.objects.all()]:
 
@@ -123,3 +123,19 @@ def add_template(req):
             resp['message'] = "模板名已存在"
 
     return render_json(resp)
+
+
+def search_template_list(req):
+    bk_biz_name = req.POST.get("bk_biz_name", None)
+    typ = req.POST.get("type", None)
+    name = req.POST.get("name", None)
+
+    Q_set = Q()
+    Q_set.connector = 'AND'
+
+    for k,v in {'bk_biz_name':bk_biz_name, 'type':typ,'name':name}.items():
+        if v:
+            Q_set.children.append()
+        pass
+
+    Template.objects.filter()

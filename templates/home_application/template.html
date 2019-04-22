@@ -85,7 +85,7 @@
                             <div class="form-group clearfix ">
                                 <label class="col-sm-4 control-label bk-lh30 pt0">业务名称：</label>
                                 <div class="col-sm-8">
-                                    <select name="" id="" class="form-control bk-valign-top" v-model="bk_biz_id">
+                                    <select  class="form-control bk-valign-top" v-model="bk_biz_id">
                                         <option v-for="biz in biz_list" :value="biz.bk_biz_id"  >{{ biz.bk_biz_name }}</option>
                                     </select>
                                 </div>
@@ -113,7 +113,7 @@
                             <div class="form-group clearfix ">
                                 <label class="col-sm-4 control-label bk-lh30 pt0">模版名称：</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control bk-valign-top" id="" placeholder="" v-model="name"> </div>
+                                    <input type="text" class="form-control bk-valign-top"  placeholder="" v-model="name"> </div>
                             </div>
                         </form>
                     </div>
@@ -170,35 +170,25 @@
     /*                  vue-script                   */
     var vm = new Vue({
         el: "#home",
-
         data: {
-
-            bk_biz_id: null,
-            status: null,
-            creator: "全部",
-            name: null,
-            id: null,
-
+            template: {
+                bk_biz_id: "",
+                type: "",
+                name: "",
+            },
             // 预加载
             template_list:[],
             biz_list : [],
         },
 
-
         methods: {
             search_template() {
-            var vm = this;
+                var vm = this;
                 $.ajax({
                     type: "POST",
-                    url: site_url + "api/get_all_biz",
+                    url: site_url + "api/search_template_list",
                     dataType: "json",
-                    data:{
-                        "bk_biz_id": vm.bk_biz_id,
-                        "status": vm.status,
-                        "creator": vm.creator,
-                        "template_name": vm.template_name,
-                        "id": vm.id,
-                    },
+                    data: vm.template,
                     success: function (data) {
                         if (data.message === "success") {
                             vm.biz_list = data.data;
@@ -225,27 +215,11 @@
                 })
             },
 
-            get_opt_list() {
-                var vm = this;
-                $.ajax({
-                    type: "POST",
-                    url: site_url + "api/get_opt_list",
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.result) {
-                            vm.opt_list = data.data;
-                        } else {
-                            alert(data.message)
-                        }
-                    }
-                })
-            },
         },
 
 
         mounted:function () {
             this.getBizList();
-            this.get_opt_list()
         }
 
 
