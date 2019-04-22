@@ -85,7 +85,8 @@ def add_template(req):
         print ">" * 100
         print obj.name
         save_path = os.path.join('./home_application/upload', obj.name)
-        if save_path not in Template.objects.all():
+        print [t.file for t in Template.objects.all()]
+        if save_path not in [t.file for t in Template.objects.all()]:
 
             print save_path
             f = open(save_path, 'wb')
