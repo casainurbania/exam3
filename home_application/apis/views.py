@@ -127,9 +127,10 @@ def search_template_list(req):
     bk_biz_name = req.POST.get("bk_biz_name", u"")
     typ = req.POST.get("type", u"")
     name = req.POST.get("name", u"")
+    creator = req.POST.get("user",u"")
     Q_set = Q()
     Q_set.connector = 'AND'
-    for k, v in {'bk_biz_name': bk_biz_name, 'type': typ, 'name': name}.items():
+    for k, v in {'bk_biz_name': bk_biz_name, 'type': typ, 'name': name,'creator':creator}.items():
         if v is not u"":
             Q_set.children.append((k, v))
     res = []

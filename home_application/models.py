@@ -28,9 +28,11 @@ class Template(models.Model):
     bk_biz_name = models.TextField(verbose_name="业务名称")
     file = models.TextField(verbose_name="文件", blank=True, null=True)
     other = models.TextField(verbose_name="备注", blank=True, null=True)
-    objects = models.Manager()
     create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True, )
     creator = models.TextField(verbose_name="创建者", blank=True, null=True)
+    change_time = models.DateTimeField(verbose_name="更新时间", auto_now=True, )
+    changer = models.TextField(verbose_name="更新者", blank=True, null=True)
+    objects = models.Manager()
 
     class Meta:
         db_table = 'saas_template'

@@ -113,9 +113,22 @@
                     <div class="col-md-4">
                         <form class="form-horizontal">
                             <div class="form-group clearfix ">
-                                <label class="col-sm-4 control-label bk-lh30 pt0">模版名称：</label>
+                                <label class="col-sm-4 control-label bk-lh30 pt0">模板名称：</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control bk-valign-top"  placeholder="" v-model="template.name"> </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-4">
+                        <form class="form-horizontal">
+                            <div class="form-group clearfix ">
+                                <label class="col-sm-4 control-label bk-lh30 pt0">操作人：</label>
+                                <div class="col-sm-8">
+                                     <select  class="form-control bk-valign-top" v-model="template.user">
+                                        <option value=""  selected="selected">--全部--</option>
+                                        <option v-for="user in user_list" :value="user"  >{{ user }}</option>
+                                    </select>
                             </div>
                         </form>
                     </div>
@@ -131,16 +144,16 @@
             <table class="table mb0 pr15 ranger-box2  ">
                 <thead>
                     <tr >
-                        <th style="width: 15%;">模板ID</th>
                         <th style="width: 15%;">模板名称</th>
                         <th style="width: 15%;">业务名称</th>
                         <th style="width: 15%;">模板类型</th>
+                        <th style="width: 15%;">创建者</th>
+                        <th style="width: 15%;">创建时间</th>
                         <th style="width: 25%;">操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="template in template_list">
-                        <td style="width: 15px;">{{ template.id }}</td>
                         <td style="width: 15px;">{{ template.name }}</td>
                         <td style="width: 10%;">{{ template.bk_biz_name }}</td>
                         <td style="width: 10%;">{{ template.type }}</td>
@@ -171,10 +184,12 @@
                 bk_biz_name: "",
                 type: "",
                 name: "",
+                user:"",
             },
             // 预加载
             template_list:[],
             biz_list : [],
+            user_list: [],
         },
 
         methods: {
@@ -188,6 +203,7 @@
                         'bk_biz_name':vm.template.bk_biz_name,
                         'type':vm.template.type,
                         'name':vm.template.name,
+                        'user':vm.template.user,
                     },
                     success: function (data) {
                         if (data.result) {
@@ -232,14 +248,31 @@
                         }
                     }
                 })
+            },
 
-            }
+            get_all_user() {
+                var vm = this;
+                $.ajax({
+                    type: "GET",
+                    url: site_url + "api/get_all_user",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.result) {
+                            vm.user_list = data.data;
+                        } else {
+                            alert(data.message)
+                        }
+                    }
+                })
+
+            },
         },
 
 
         mounted:function () {
             this.getBizList();
-            this.search_template()
+            this.search_template();
+            this.get_all_user();
         }
 
 
