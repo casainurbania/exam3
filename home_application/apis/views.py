@@ -11,13 +11,11 @@ from account.models import BkUser
 from common.mymako import render_mako_context, render_json
 from conf.default import APP_ID
 from home_application.celery_tasks import *
-
+from home_application.models import *
 from home_application.models import *
 from home_application.utils.ESB import ESBApi, ESBComponentApi
 import base64
 import datetime, time
-
-
 
 
 # 获取全部业务
@@ -77,34 +75,43 @@ def get_operator_list(req):
 
 
 def add_template(req):
-    print req.body
     print "========= add_template ======="
     try:
         bk_biz_name = req.POST["bk_biz_name"]
         typ = req.POST["type"]
         name = req.POST["name"]
-        obj = req.POST['file']
+        obj = req.FILES.get("file", None)
 
-        print ">"*100
-        print obj
-        save_path =os.path.join('./upload', obj.name)
-        f = open(save_path, 'wb')
-        for line in obj.chunks():
-            f.write(line)
-        f.close()
+        print ">" * 100
+        print obj.name
+        save_path = os.path.join('./home_application/upload', obj.name)
+        if save_path not in Template.objects.all():
 
-        Template.objects.create(
-            bk_biz_name=bk_biz_name,
-            type=typ,
-            name=name,
-            file=save_path
-        ).save()
+            print save_path
+            f = open(save_path, 'wb')
+            for line in obj.chunks():
+                f.write(line)
+            f.close()
 
-        resp = {
-            'result': False,
-            'message': u'插入失败',
-            'data': None,
-        }
+            Template.objects.create(
+                bk_biz_name=bk_biz_name,
+                type=typ,
+                name=name,
+                file=save_path
+            ).save()
+            print ">" * 100, 'saved'
+            resp = {
+                'result': True,
+                'message': u'插入成功',
+                'data': None,
+            }
+        else:
+            resp = {
+                'result': False,
+                'message': u'该文件名已存在',
+                'data': None,
+            }
+
     except Exception as e:
         resp = {
             'result': False,
