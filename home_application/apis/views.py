@@ -87,13 +87,10 @@ def add_template(req):
         save_path = os.path.join(UPLOAD_PATH, obj.name)
         print [t.file for t in Template.objects.all()]
         if save_path not in [t.file for t in Template.objects.all()]:
-
-            print save_path
             f = open(save_path, 'wb')
             for line in obj.chunks():
                 f.write(line)
             f.close()
-
             Template.objects.create(
                 bk_biz_name=bk_biz_name,
                 type=typ,
@@ -126,16 +123,25 @@ def add_template(req):
 
 
 def search_template_list(req):
-    bk_biz_name = req.POST.get("bk_biz_name", None)
-    typ = req.POST.get("type", None)
-    name = req.POST.get("name", None)
-
+    print "======search====="
+    bk_biz_name = req.POST.get("bk_biz_name", u"")
+    typ = req.POST.get("type", u"")
+    name = req.POST.get("name", u"")
     Q_set = Q()
     Q_set.connector = 'AND'
-
-    for k,v in {'bk_biz_name':bk_biz_name, 'type':typ,'name':name}.items():
-        if v:
-            Q_set.children.append()
-        pass
-
-    Template.objects.filter()
+    for k, v in {'bk_biz_name': bk_biz_name, 'type': typ, 'name': name}.items():
+        if v is not u"":
+            Q_set.children.append((k, v))
+    res = []
+    for t in Template.objects.filter(Q_set):
+        res.append({
+            'name':t.name,
+            'bk_biz_name':t.bk_biz_name,
+            'type':t.type,
+        })
+    resp = {
+        'result': True,
+        'message': u'成功',
+        'data': res,
+    }
+    return render_json(resp)
