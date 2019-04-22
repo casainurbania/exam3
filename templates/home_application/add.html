@@ -176,8 +176,6 @@
                 })
             },
 
-
-
             add_template() {
                  var vm = this;
                  if (vm.template.bk_biz_name === "" ||
@@ -187,8 +185,6 @@
 
                  else{
                     var formData = new FormData(document.querySelector("form"));//获取form值
-                    alert("post->")
-
                     $.ajax({
                         type: "POST",
                         url: site_url + "api/add_template",
@@ -211,19 +207,10 @@
 
 
 
-
-
-
-
         },
-
-
         mounted:function () {
             this.getBizList();
-            this.get_opt_list()
         }
-
-
         })
     </script>
     </div>
