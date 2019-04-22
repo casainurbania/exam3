@@ -75,6 +75,15 @@ class ESBApi(object):
             result = {'message': e}
             return result
 
+    def get_all_users(self):
+        try:
+            param = self.__param
+            result = self.__client.bk_login.get_all_users(param)
+            return result
+        except Exception, e:
+            result = {'message': e}
+            return result
+
 
 class ESBComponentApi(object):
     """

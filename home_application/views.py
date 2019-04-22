@@ -13,6 +13,7 @@ from common.mymako import render_mako_context, render_json
 
 
 def test(req):
+
     a = req.GET.get("a")
     b = req.GET.get("b")
     resp = {

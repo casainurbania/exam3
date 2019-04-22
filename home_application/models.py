@@ -29,6 +29,8 @@ class Template(models.Model):
     file = models.TextField(verbose_name="文件", blank=True, null=True)
     other = models.TextField(verbose_name="备注", blank=True, null=True)
     objects = models.Manager()
+    create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True, )
+    creator = models.TextField(verbose_name="创建者", blank=True, null=True)
 
     class Meta:
         db_table = 'saas_template'

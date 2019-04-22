@@ -134,7 +134,7 @@
                                 <div class="col-sm-8">
                                     <select class="form-control bk-valign-top" v-model="creator">
                                         <option value="全部">--全部--</option>
-                                        <option v-for="opt in opt_list" :value="opt" >{{ opt }}</option>
+                                        <option v-for="user in user_list" :value="opt" >{{ user }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -226,6 +226,7 @@
             // 预加载
             template_list:[],
             biz_list : [],
+            user_list: [],
         },
 
 
@@ -253,6 +254,23 @@
                 })
             },
 
+            get_all_user() {
+                var vm = this;
+                $.ajax({
+                    type: "GET",
+                    url: site_url + "api/get_all_user",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.result) {
+                            vm.user_list = data.data;
+                        } else {
+                            alert(data.message)
+                        }
+                    }
+                })
+
+            },
+
             getBizList() {
                 var vm = this;
                 $.ajax({
@@ -269,27 +287,15 @@
                 })
             },
 
-            get_opt_list() {
-                var vm = this;
-                $.ajax({
-                    type: "POST",
-                    url: site_url + "api/get_opt_list",
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.result) {
-                            vm.opt_list = data.data;
-                        } else {
-                            alert(data.message)
-                        }
-                    }
-                })
-            },
+
+
+
         },
 
 
         mounted:function () {
             this.getBizList();
-            this.get_opt_list()
+            this.get_all_user();
         }
 
 

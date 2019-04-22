@@ -135,9 +135,9 @@ def search_template_list(req):
     res = []
     for t in Template.objects.filter(Q_set):
         res.append({
-            'name':t.name,
-            'bk_biz_name':t.bk_biz_name,
-            'type':t.type,
+            'name': t.name,
+            'bk_biz_name': t.bk_biz_name,
+            'type': t.type,
         })
     resp = {
         'result': True,
@@ -145,3 +145,20 @@ def search_template_list(req):
         'data': res,
     }
     return render_json(resp)
+
+
+def create_task(req):
+    id = req.POST['id']
+    creator = req.user.username
+    Task.objects.create()
+
+
+def get_all_user(req):
+    res = ESBApi(req).get_all_users()
+    print [i['bk_username'] for i in res['data']]
+    res = {
+        'result': True,
+        'message': u'成功',
+        'data': [i['bk_username'] for i in res['data']]
+    }
+    return render_json(res)

@@ -131,6 +131,7 @@
             <table class="table mb0 pr15 ranger-box2  ">
                 <thead>
                     <tr >
+                        <th style="width: 15%;">模板ID</th>
                         <th style="width: 15%;">模板名称</th>
                         <th style="width: 15%;">业务名称</th>
                         <th style="width: 15%;">模板类型</th>
@@ -139,11 +140,12 @@
                 </thead>
                 <tbody>
                     <tr v-for="template in template_list">
+                        <td style="width: 15px;">{{ template.id }}</td>
                         <td style="width: 15px;">{{ template.name }}</td>
                         <td style="width: 10%;">{{ template.bk_biz_name }}</td>
                         <td style="width: 10%;">{{ template.type }}</td>
                         <td>
-                            <button class="btn btn-xs btn-success"> <i class="glyphicon glyphicon-ok"></i> </button>
+                            <button class="btn btn-xs btn-success" @click="create_task(template.id)"> <i class="glyphicon glyphicon-ok"></i> </button>
                             <button class="btn btn-xs btn-warning"> <i class="glyphicon glyphicon-edit"></i> </button>
                             <button class="btn btn-xs btn-danger"> <i class="glyphicon glyphicon-remove"></i> </button>
                         </td>
@@ -213,6 +215,25 @@
                 })
             },
 
+            create_task(id) {
+                var vm = this;
+                $.ajax({
+                    type: "POST",
+                    url: site_url + "api/create_task",
+                    dataType: "json",
+                    data:{
+                        "id": id
+                    },
+                    success: function (data) {
+                        if (data.result) {
+                            alert("创建任务成功")
+                        } else {
+                            alert(data.message)
+                        }
+                    }
+                })
+
+            }
         },
 
 
