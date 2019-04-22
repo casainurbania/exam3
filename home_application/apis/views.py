@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 # TODO optimize import
+import os
+
 from django.db.models import Q
 from django.core import serializers
 
@@ -20,7 +22,6 @@ import datetime, time
 
 # 获取全部业务
 def get_all_biz(req):
-    print "=" * 100
     try:
         result = ESBApi(req).search_business()
         if result['message'] == 'success':
@@ -75,30 +76,42 @@ def get_operator_list(req):
     return render_json(resp)
 
 
-# def add_template(req):
-#     try:
-#         print "=========add"
-#         bk_biz_id = req.POST["bk_biz_id"]
-#         typ = req.POST["type"]
-#         name = req.user.username
-#
-#         Template.objects.create(
-#             bk_biz_id=bk_biz_id,
-#             type=typ,
-#             bk_biz_name=BIZ_MAP[bk_biz_id],
-#             creator=name
-#         ).save()
-#
-#         resp = {
-#             'result': True,
-#             'message': u'成功',
-#             'data': None,
-#         }
-#     except Exception as e:
-#         resp = {
-#             'result': False,
-#             'message': u' %s' % e,
-#             'data': None,
-#         }
-#
-#     return render_json(resp)
+def add_template(req):
+    print req.body
+    print "========= add_template ======="
+    try:
+        bk_biz_name = req.POST["bk_biz_name"]
+        typ = req.POST["type"]
+        name = req.POST["name"]
+        obj = req.POST['file']
+
+        print ">"*100
+        print obj
+        save_path =os.path.join('./upload', obj.name)
+        f = open(save_path, 'wb')
+        for line in obj.chunks():
+            f.write(line)
+        f.close()
+
+        Template.objects.create(
+            bk_biz_name=bk_biz_name,
+            type=typ,
+            name=name,
+            file=save_path
+        ).save()
+
+        resp = {
+            'result': False,
+            'message': u'插入失败',
+            'data': None,
+        }
+    except Exception as e:
+        resp = {
+            'result': False,
+            'message': u' %s' % e,
+            'data': None,
+        }
+        if e[0] == 1062:
+            resp['message'] = "模板名已存在"
+
+    return render_json(resp)

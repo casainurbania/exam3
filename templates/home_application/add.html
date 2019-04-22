@@ -62,6 +62,10 @@
                             <img src="https://magicbox.bk.tencent.com/static_api/v3/bk/images/logo3.png" alt="" class="logo"> </a>
                     </div>
                     <div class="collapse navbar-collapse navbar-responsive-collapse" id="king-horizontal-nav2-collapse">
+                        <ul class="nav navbar-nav">
+                             <li class="king-navbar-active"><a>新增待办模板</a></li>
+                        </ul>
+
                         <ul class="nav navbar-nav navbar-right">
                             <li>
                                 <a href="javascript:;">
@@ -75,13 +79,12 @@
         </div>
         <div class="king-layout2-main mt15" style="width:1200px;">
 
-
+<form>
 <div class="form-horizontal" id="form4_demo1" id="add">
-
         <div class="form-group">
         <label class="control-label col-sm-2" >业务名称</label>
         <div class="col-sm-7">
-            <select class="form-control" id="validation_select" name="validation_select" v-model="template.bk_biz_name">
+            <select class="form-control" id="validation_select" name="bk_biz_name" v-model="template.bk_biz_name">
                         <option v-for="biz in biz_list" :value="biz.bk_biz_name"  >{{ biz.bk_biz_name }}</option>
             </select>
 
@@ -91,7 +94,7 @@
         <div class="form-group">
         <label class="control-label col-sm-2">模板类型</label>
         <div class="col-sm-7">
-                <select name="" id="" class="form-control bk-valign-top" v-model="template.type">
+                <select name="type" id="" class="form-control bk-valign-top" v-model="template.type">
                     <option value="变更发布">变更发布</option>
                     <option value="扩容类">扩容类</option>
                     <option value="上线类">上线类</option>
@@ -105,14 +108,14 @@
     <div class="form-group">
         <label class="control-label col-sm-2">模板名称</label>
         <div class="col-sm-7">
-            <input class="form-control" placeholder="请控制在50个字符内" type="text"  v-model="template.name">
+            <input name="name" class="form-control" placeholder="请控制在50个字符内" type="text"  v-model="template.name">
         </div>
     </div>
 
       <div class="form-group">
         <label class="control-label col-sm-2" >上传模板文件</label>
         <div class="col-sm-7">
-            <input class="form-control"  type="file"  v-model="template.file">
+            <input name="file"   class="form-control"  type="file">
         </div>
     </div>
 
@@ -131,8 +134,7 @@
 
     </div>
 </div>
-
-
+</form>
             <!-- 设置面板End -->
         </div>
     </div>
@@ -143,11 +145,13 @@
         el: "#home",
 
         data: {
+
             template:{
                 bk_biz_name: "",
                 type:"",
                 name: "",
                 file:"",
+                file_name:"",
             },
 
             // 预加载
@@ -177,22 +181,40 @@
 
             add_template() {
                  var vm = this;
-                $.ajax({
-                    type: "POST",
-                    url: site_url + "api/add_template",
-                    dataType: "json",
-                    data: vm.t,
+                 if (vm.template.bk_biz_name === "" ||
+                     vm.template.type==="" ||
+                     vm.template.name===""
+                    ) alert("信息不完整");
 
-                    success: function (data) {
-                        if (data.result){
-                            alert("载入成功")
-                        }
-                        else{
-                            alert(data.message)
-                        }
-                    }
-                })
+                 else{
+                    var formData = new FormData(document.querySelector("form"));//获取form值
+                    alert("post->")
+
+                    $.ajax({
+                        type: "POST",
+                        url: site_url + "api/add_template",
+                        dataType: "json",
+                        data: formData,
+                        processData: false,  // 不处理数据
+                        contentType: false,   // 不设置内容类型
+                        success: function (data) {
+                            if (data.result){
+                                alert("载入成功")
+                            }
+                            else{
+                                alert("失败", data.message)
+                                }
+                            }
+                    })
+                 }
+
             },
+
+
+
+
+
+
 
         },
 

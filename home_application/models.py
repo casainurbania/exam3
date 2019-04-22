@@ -24,7 +24,7 @@ class Template(models.Model):
     name = models.CharField(verbose_name="模板名称", max_length=64,unique=True)
     type = models.TextField(verbose_name="模板类型")
     # 变更发布  扩容类  上线类 下架类  例行维护
-    bk_biz_id = models.TextField(verbose_name="业务ID")
+    # bk_biz_id = models.TextField(verbose_name="业务ID")
     bk_biz_name = models.TextField(verbose_name="业务名称")
     file = models.TextField(verbose_name="文件", blank=True, null=True)
     other = models.TextField(verbose_name="备注", blank=True, null=True)

@@ -97,7 +97,7 @@
                             <div class="form-group clearfix ">
                                 <label class="col-sm-4 control-label bk-lh30 pt0">模板类型：</label>
                                 <div class="col-sm-8">
-                                    <select name="" id="" class="form-control bk-valign-top" v-model="type">
+                                    <select class="form-control bk-valign-top" v-model="type">
                                         <option value="变更发布">变更发布</option>
                                         <option value="扩容类">扩容类</option>
                                         <option value="上线类">上线类</option>
@@ -113,7 +113,7 @@
                             <div class="form-group clearfix ">
                                 <label class="col-sm-4 control-label bk-lh30 pt0">任务状态：</label>
                                 <div class="col-sm-8">
-                                    <select name="" id="" class="form-control bk-valign-top" v-model="status">
+                                    <select  class="form-control bk-valign-top" v-model="status">
                                         <option value="全部">---全部---</option>
                                         <option value="待操作">待操作</option>
                                         <option value="操作中">操作中</option>
@@ -132,7 +132,7 @@
                             <div class="form-group clearfix ">
                                 <label class="col-sm-4 control-label bk-lh30 pt0">创建人：</label>
                                 <div class="col-sm-8">
-                                    <select name="" id="" class="form-control bk-valign-top" v-model="creator">
+                                    <select class="form-control bk-valign-top" v-model="creator">
                                         <option value="全部">--全部--</option>
                                         <option v-for="opt in opt_list" :value="opt" >{{ opt }}</option>
                                     </select>
@@ -145,7 +145,7 @@
                             <div class="form-group clearfix ">
                                 <label class="col-sm-4 control-label bk-lh30 pt0">模版名称：</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control bk-valign-top" id="" placeholder="" v-model="name"> </div>
+                                    <input type="text" class="form-control bk-valign-top"  placeholder="" v-model="name"> </div>
                             </div>
                         </form>
                     </div>
@@ -154,7 +154,7 @@
                             <div class="form-group clearfix ">
                                 <label class="col-sm-4 control-label bk-lh30 pt0">操作识别号：</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control bk-valign-top" id="" placeholder="提示信息"  v-model="id"> </div>
+                                    <input type="text" class="form-control bk-valign-top"  placeholder="提示信息"  v-model="id"> </div>
                             </div>
                         </form>
                     </div>
