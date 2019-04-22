@@ -52,27 +52,6 @@ def get_all_biz(req):
         return render_json(resp)
 
 
-def get_operator_list(req):
-    try:
-        print "======get_operator_list======"
-        operator_list = []
-        for t in Template.objects.all():
-            operator_list.append(t.operator)
-
-        resp = {
-            'result': True,
-            'message': u'成功',
-            'data': operator_list,
-        }
-    except Exception as e:
-        resp = {
-            'result': False,
-            'message': u'获取操作者列表失败 %s' % e,
-            'data': None,
-        }
-
-    return render_json(resp)
-
 
 def add_template(req):
     print "========= add_template ======="
@@ -82,8 +61,6 @@ def add_template(req):
         name = req.POST["name"]
         obj = req.FILES.get("file", None)
 
-        print ">" * 100
-        print obj.name
         save_path = os.path.join(UPLOAD_PATH, obj.name)
         print [t.file for t in Template.objects.all()]
         if save_path not in [t.file for t in Template.objects.all()]:
@@ -97,7 +74,6 @@ def add_template(req):
                 name=name,
                 file=save_path
             ).save()
-            print ">" * 100, 'saved'
             resp = {
                 'result': True,
                 'message': u'插入成功',
@@ -123,11 +99,15 @@ def add_template(req):
 
 
 def search_template_list(req):
-    print "======search====="
+    print "====== search_template_list ====="
     bk_biz_name = req.POST.get("bk_biz_name", u"")
     typ = req.POST.get("type", u"")
     name = req.POST.get("name", u"")
     creator = req.POST.get("user",u"")
+    print bk_biz_name
+    print typ
+    print name
+    print creator
     Q_set = Q()
     Q_set.connector = 'AND'
     for k, v in {'bk_biz_name': bk_biz_name, 'type': typ, 'name': name,'creator':creator}.items():
@@ -156,7 +136,6 @@ def create_task(req):
 
 def get_all_user(req):
     res = ESBApi(req).get_all_users()
-    print [i['bk_username'] for i in res['data']]
     res = {
         'result': True,
         'message': u'成功',
