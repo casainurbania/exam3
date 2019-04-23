@@ -194,9 +194,8 @@
                         <td style="width: 10%;">{{ task.create_time }}</td>
                         <td style="width: 3%;">{{ task.status }}</td>
                         <td>
-                            <button class="btn btn-xs btn-success"> <i class="glyphicon glyphicon-ok"></i> </button>
-                            <button class="btn btn-xs btn-warning"> <i class="glyphicon glyphicon-edit"></i> </button>
-                            <button class="btn btn-xs btn-danger"> <i class="glyphicon glyphicon-remove"></i> </button>
+                            <button type="button" class="btn btn-xs btn-success" @click="check_task"> <i class="glyphicon glyphicon-ok"></i> </button>
+                            <button type="button" class="btn btn-xs btn-warning"> <i class="glyphicon glyphicon-edit"></i> </button>
                         </td>
                     </tr>
                 </tbody>
@@ -210,6 +209,48 @@
             <!-- 设置面板End -->
         </div>
     </div>
+    </div>
+
+<!-- 任务详情弹窗 start -->
+<!--
+如果没有引用以下文件，请去掉此注释
+<link href="https://magicbox.bk.tencent.com/static_api/v3/assets/bootstrap-3.3.4/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://magicbox.bk.tencent.com/static_api/v3/bk/css/bk.css" rel="stylesheet">
+<script src="https://magicbox.bk.tencent.com/static_api/v3/assets/js/jquery-1.10.2.min.js"></script>
+-->
+<table class="table table-bordered table7_demo">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>名称</th>
+            <th>位置</th>
+            <th>日期</th>
+            <th>类型</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>Ravi Kumar</td>
+            <td>India</td>
+            <td>23/12/2012</td>
+            <td>Paid</td>
+            <td>
+                <span class="label label-info">Active</span>
+            </td>
+            <td>
+                <button class="btn btn-xs btn-warning" title="编辑">
+                    <i class="glyphicon glyphicon-edit"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- 任务详情弹窗 end -->
+</body>
     <script>
 
     /*                  vue-script                   */
@@ -229,6 +270,10 @@
             biz_list : [],
             user_list: [],
             task_list: [],
+
+            show:{
+                showCheck:false,
+            },
         },
 
 
@@ -290,6 +335,23 @@
                 })
             },
 
+            check_task() {
+
+
+            },
+
+            pop_up(tpl) {
+                var vm = this;
+                vm.showCheck = true;
+
+        },
+
+         pop_down() {
+                alert("<<<<<<<");
+                 var vm = this;
+                vm.showCheck = false;
+            },
+
 
         },
 
@@ -303,7 +365,6 @@
 
         })
     </script>
-    </div>
-</body>
+
 
 </html>
