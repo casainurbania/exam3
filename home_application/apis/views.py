@@ -26,7 +26,6 @@ def get_all_biz(req):
             biz_list = []
             for biz_info in result['data']['info']:
                 biz_list.append({
-                    'bk_biz_id': biz_info['bk_biz_id'],
                     'bk_biz_name': biz_info['bk_biz_name']
                 })
 
@@ -122,7 +121,7 @@ def search_template_list(req):
             'name': t.name,
             'bk_biz_name': t.bk_biz_name,
             'type': t.type,
-        })
+        })  # TODO 测试便是否可以遍历对每一个对象使用 model_to_dict  转化
     resp = {
         'result': True,
         'message': u'成功',
@@ -139,8 +138,10 @@ def create_task(req):
         name = req.POST['name']
         key = req.POST['key']
         creator = req.user.username
-        tpl = Template.objects.get(name=name)
-        Task.objects.create(creator=creator, key=key, template=tpl)
+        tpl = Template.objects.get(name=name).file
+        content = parse_excel(tpl)
+        Task.objects.create(creator=creator, key=key, template=tpl, content=content, status="未操作").save()
+        Task.objects.sync_operators(key=key)
         resp = {
             'result': True,
             'message': u'成功',
@@ -159,9 +160,9 @@ def create_task(req):
 # 获取全部用户
 def get_all_user(req):
     res = ESBApi(req).get_all_users()
-    res = {
+    resp = {
         'result': True,
         'message': u'成功',
         'data': [i['bk_username'] for i in res['data']]
     }
-    return render_json(res)
+    return render_json(resp)

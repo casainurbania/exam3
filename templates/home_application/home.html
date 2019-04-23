@@ -85,8 +85,8 @@
                             <div class="form-group clearfix ">
                                 <label class="col-sm-4 control-label bk-lh30 pt0">业务名称：</label>
                                 <div class="col-sm-8">
-                                    <select name="" id="" class="form-control bk-valign-top" v-model="bk_biz_id">
-                                        <option v-for="biz in biz_list" :value="biz.bk_biz_id"  >{{ biz.bk_biz_name }}</option>
+                                    <select name="" id="" class="form-control bk-valign-top" v-model="bk_biz_name">
+                                        <option v-for="biz in biz_list" :value="biz.bk_biz_name"  >{{ biz.bk_biz_name }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -117,7 +117,7 @@
                                         <option value="全部">---全部---</option>
                                         <option value="待操作">待操作</option>
                                         <option value="操作中">操作中</option>
-                                        <option value="任务完成">任务完成</option>
+                                        <option value="任务完成">已完成</option>
                                     </select>
                                 </div>
                             </div>
@@ -133,8 +133,8 @@
                                 <label class="col-sm-4 control-label bk-lh30 pt0">创建人：</label>
                                 <div class="col-sm-8">
                                     <select class="form-control bk-valign-top" v-model="creator">
-                                        <option value="全部">--全部--</option>
-                                        <option v-for="user in user_list" :value="opt" >{{ user }}</option>
+                                        <option value="">--全部--</option>
+                                        <option v-for="user in user_list" :value="user" >{{ user }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -145,7 +145,7 @@
                             <div class="form-group clearfix ">
                                 <label class="col-sm-4 control-label bk-lh30 pt0">模版名称：</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control bk-valign-top"  placeholder="" v-model="name"> </div>
+                                    <input type="text" class="form-control bk-valign-top"   v-model="template_name"> </div>
                             </div>
                         </form>
                     </div>
@@ -154,7 +154,7 @@
                             <div class="form-group clearfix ">
                                 <label class="col-sm-4 control-label bk-lh30 pt0">操作识别号：</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control bk-valign-top"  placeholder="提示信息"  v-model="id"> </div>
+                                    <input type="text" class="form-control bk-valign-top"  v-model="key"> </div>
                             </div>
                         </form>
                     </div>
@@ -162,37 +162,36 @@
             </div>
             <form class="form-vertical p15 tr">
                 <div class="form-group">
-                    <button type="button" class="king-btn mr10  king-success" @click="search_template()">查询</button>
+                    <button type="button" class="king-btn mr10  king-success" @click="search_task()">查询</button>
                     <button type="button" class="king-btn king-default ">清空</button>
                 </div>
             </form>
             <table class="table mb0 pr15 ranger-box2  ">
                 <thead>
                     <tr >
-                        <th style="width: 15%;">模板名称</th>
-                        <th style="width: 8%;">业务名称</th>
+                        <th style="width: 10%;">模板名称</th>
+                        <th style="width: 10%;">操作识别号</th>
+                        <th style="width: 7%;">业务名称</th>
                         <th style="width: 7%;">模板类型</th>
-                        <th style="width: 5%;">创建人</th>
-                        <th style="width: 15%;">创建时间</th>
-                        <th style="width: 10%;">更新者</th>
-                        <th style="width: 10%;">更改时间</th>
-                        <th style="width: 10%;">状态</th>
+                        <th style="width: 15%;">可操作者</th>
+                        <th style="width: 5%;">创建者</th>
+                        <th style="width: 10%;">创建时间</th>
+                        <th style="width: 3%;">状态</th>
                         <th style="width: 20%;">操作</th>
 
 
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="template in template_list">
-                        <td style="width: 15%;">{{ template.name }}</td>
-                        <td style="width: 8%;">{{ template.bk_biz_name }}</td>
-                        <td style="width: 7%;">{{ template.type }}</td>
-                        <td style="width: 5%;">{{ template.creator }}</td>
-                        <td style="width: 15%;">{{ template.create_time }}</td>
-                        <td style="width: 10%;">{{ template.operator }}</td>
-                        <td style="width: 10%;">{{ template.change_time }}</td>
-                        <td style="width: 10%;">{{ template.change_time }}</td>
-                        <td style="width: 3%;">{{ template.status }}</td>
+                    <tr v-for="task in task_list">
+                        <td style="width: 10%;">{{ task.name }}</td>
+                        <td style="width: 10%;">{{ task.key }}</td>
+                        <td style="width: 7%;">{{ task.bk_biz_name }}</td>
+                        <td style="width: 7%;">{{ task.type }}</td>
+                        <td style="width: 7%;">{{ task.operators }}</td>
+                        <td style="width: 5%;">{{ task.creator }}</td>
+                        <td style="width: 10%;">{{ task.create_time }}</td>
+                        <td style="width: 3%;">{{ task.status }}</td>
                         <td>
                             <button class="btn btn-xs btn-success"> <i class="glyphicon glyphicon-ok"></i> </button>
                             <button class="btn btn-xs btn-warning"> <i class="glyphicon glyphicon-edit"></i> </button>
@@ -217,37 +216,39 @@
         el: "#home",
 
         data: {
-
-            bk_biz_id: null,
+            bk_biz_name: null,
+            type: null,
             status: null,
-            creator: "全部",
+            creator: null,
             name: null,
-            id: null,
-
+            key: null,
+            template_name:null,
             // 预加载
             template_list:[],
             biz_list : [],
             user_list: [],
+            task_list: [],
         },
 
 
         methods: {
-            search_template() {
+            search_task() {
             var vm = this;
                 $.ajax({
-                    type: "POST",
-                    url: site_url + "api/search_template_list",
+                    type: "GET",
+                    url: site_url + "api/search_task",
                     dataType: "json",
                     data:{
-                        "bk_biz_id": vm.bk_biz_id,
+                        "bk_biz_name": vm.bk_biz_name,
                         "status": vm.status,
                         "creator": vm.creator,
+                        "type":vm.type,
                         "template_name": vm.template_name,
-                        "id": vm.id,
+                        "key": vm.key,
                     },
                     success: function (data) {
                         if (data.result) {
-                            vm.template_list = data.data;
+                            vm.task_list = data.data;
                         } else {
                             alert(data.message)
                         }
@@ -289,15 +290,13 @@
             },
 
 
-
-
         },
 
 
         mounted:function () {
             this.getBizList();
             this.get_all_user();
-            this.search_template()
+            this.search_task()
         }
 
 

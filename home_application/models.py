@@ -11,14 +11,9 @@ See the License for the specific language governing permissions and limitations 
 
 from django.db import models
 import time
-
+import json
 from home_application.utils.ex import parse_excel
 
-
-# class TemplateManager(models.Manager):
-#     def get_all_operators(self):
-#         for each in self.all():
-#             parse_excel(each.file)
 
 class Template(models.Model):
     name = models.CharField(verbose_name="模板名称", max_length=64, unique=True)
@@ -40,6 +35,37 @@ class Template(models.Model):
         verbose_name_plural = '模板表'
 
 
+class TaskManager(models.Manager):
+    # 根据任务现状,同步自身可操作者
+    @classmethod
+    def sync_operators(self, key):
+        obj = self.get(key=key)
+        map_str = json.loads(obj.content)
+        operators = []
+        uncomplate = 0
+        completed = 0
+        for i in range(len(map_str)):
+            if map_str[str(i)]["done"]:
+                completed += 1
+            else:
+                operators.append(map_str[str(i)]["operator"])
+                uncomplate += 1
+
+        if  completed>0:
+            if uncomplate==0:
+                obj.status = "已完成"
+            else:
+                obj.status = "未完成"
+        else:
+            obj.status = "未操作"
+
+        obj.operators = ",".join(operators)
+        obj.save()
+
+
+        obj.save()
+
+
 class Task(models.Model):
     key = models.CharField(verbose_name="任务识别码", max_length=64, unique=True)
     content = models.TextField(verbose_name="详情", blank=True)
@@ -52,7 +78,7 @@ class Task(models.Model):
     creator = models.TextField(verbose_name="创建者", blank=True, null=True)
     other = models.TextField(verbose_name="备注", blank=True, null=True)
 
-    objects = models.Manager()
+    objects = TaskManager()
 
     class Meta:
         db_table = 'saas_task'

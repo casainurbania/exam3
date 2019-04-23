@@ -40,7 +40,7 @@ def parse_excel(path):
         task_map[str(i)] = {
             'task': tasks[i],
             'remark': remarks[i],
-            'operators': operators[i],
+            'operator': operators[i],
             'done': 0,
         }
 
@@ -56,6 +56,6 @@ def parse_excel(path):
 
     # 打印单元格内容格式
 
-
-if __name__ == '__main__':
-    print parse_excel(r'/Users/enzo/Downloads/help/checklist.xls')
+#
+# if __name__ == '__main__':
+#     print parse_excel(r'/Users/enzo/Downloads/help/sample.xls')
