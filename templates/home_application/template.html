@@ -33,6 +33,7 @@
     <!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
     <script src="https://magicbox.bk.tencent.com/static_api/v3/assets/echarts-2.0/echarts-all.js"></script>
     <script src="https://magicbox.bk.tencent.com/static_api/v3/assets/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <link href="https://magicbox.bk.tencent.com/static_api/v3/bk/css/bk.css" rel="stylesheet">
     <!-- 放到蓝鲸开发框架后，请引用csrftoken.js解决jquery下POST请求403问题，如果使用的是mako模板，可以直接去掉下面的注释 -->
     <!--script src="${STATIC_URL}js/csrftoken.js?v=${STATIC_VERSION}" type="text/javascript"></script-->
     <!-- 这个是全局配置，如果需要在js中使用app_id和site_url,则这个javascript片段一定要保留 -->
@@ -162,13 +163,13 @@
                         <td style="width: 10%;">{{ template.bk_biz_name }}</td>
                         <td style="width: 7%;">{{ template.type }}</td>
                         <td style="width: 7%;">{{ template.creator }}</td>
-                        <td style="width: 15%;">{{ template.create_time }}</td>
+                        <td style="width: 15%;">{{ template.create_taskime }}</td>
                         <td style="width: 7%;">{{ template.changer }}</td>
                         <td style="width: 16%;">{{ template.change_time }}</td>
 
                         <td>
-                            <button class="btn btn-xs btn-success" @click="create_task(template.id)"> <i class="glyphicon glyphicon-ok"></i> </button>
-                            <button class="btn btn-xs btn-warning"> <i class="glyphicon glyphicon-edit"></i> </button>
+                            <button class="btn btn-xs btn-success" @click=" pop_up(template)"> <i class="glyphicon glyphicon-ok"></i> </button>
+                            <button class="btn btn-xs btn-warning" @click=" check_task(template)"> <i class="glyphicon glyphicon-edit"></i> </button>
                             <button class="btn btn-xs btn-danger"> <i class="glyphicon glyphicon-remove"></i> </button>
                         </td>
                     </tr>
@@ -182,16 +183,60 @@
             </template>
             <!-- 设置面板End -->
         </div>
+
+        <!-- 弹窗 start -->
+ <div class="king-block king-block-bordered" v-if="showCheck" style="position: absolute;top: 50px;left: 25%  ;width: 50%;">
+    <div class="king-block-header king-gray-light">
+        <ul class="king-block-options">
+            <li>
+                <button type="button"><i class="fa fa-cog"></i></button>
+            </li>
+        </ul>
+        <h3 class="king-block-title">创建代办任务</h3>
+    </div>
+    <div class="king-block-content">
+        <form class="form-horizontal" method="POST">
+            <div class="form-group">
+                <label for="inputCount1" class="col-sm-3 control-label">业务名称：</label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control" id="inputCount1"  disabled="disabled" :value="tpl.bk_biz_name">
+                </div>
+            </div>
+
+           <div class="form-group">
+                <label for="inputCount2" class="col-sm-3 control-label">模板类型：</label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control" id="inputCount2"  disabled="disabled" :value="tpl.type">
+                </div>
+            </div>
+
+           <div class="form-group">
+                <label for="inputCount3" class="col-sm-3 control-label">模板名称：</label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control"  id="inputCount3"  disabled="disabled" :value="tpl.name">
+                </div>
+            </div>
+
+           <div class="form-group">
+                <label for="inputCount4" class="col-sm-3 control-label">操作识别号：</label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control"  id="inputCount4" placeholder="请勿超过50个字符"  v-model="tpl.key">
+                </div>
+            </div>
+  </form>
+
+            <div  style="text-align: center">
+                    <button type="button" class="king-btn mr10  king-success"  @click="create_task">创建</button>
+                    <button type="button" class="king-btn-demo king-btn king-default" @click="pop_down">取消</button>
+            </div>
+
+    </div>
+</div>
+        <!-- 弹窗 end -->
+
+
     </div>
 
-
-
-    <!-- 创建表单弹窗 start -->
-    <%block name='popup'>
-
-
-    </%block>
-    <!-- 创建表单弹窗 end -->
 
     <script>
 
@@ -209,6 +254,14 @@
             template_list:[],
             biz_list : [],
             user_list: [],
+            //弹框传值对象
+            showCheck : false,
+            tpl:{
+                bk_biz_name: "",
+                name:"",
+                type:"",
+                key:"",
+            }
         },
 
         methods: {
@@ -250,24 +303,7 @@
                 })
             },
 
-            create_task(id) {
-                var vm = this;
-                $.ajax({
-                    type: "POST",
-                    url: site_url + "api/create_task",
-                    dataType: "json",
-                    data:{
-                        "id": id
-                    },
-                    success: function (data) {
-                        if (data.result) {
-                            alert("创建任务成功")
-                        } else {
-                            alert(data.message)
-                        }
-                    }
-                })
-            },
+
 
             get_all_user() {
                 var vm = this;
@@ -285,7 +321,52 @@
                 })
 
             },
+
+         pop_up(tpl) {
+                var vm = this;
+                vm.showCheck = true;
+
+                vm.tpl.bk_biz_name= tpl.bk_biz_name;
+                vm.tpl.type = tpl.type;
+                vm.tpl.name = tpl.name
         },
+
+         pop_down() {
+                alert("<<<<<<<");
+                 var vm = this;
+                vm.showCheck = false;
+            },
+
+        create_task(){
+            alert(">>>>");
+            var vm = this;
+            $.ajax({
+                    type: "POST",
+                    url: site_url + "api/create_task",
+                    dataType: "json",
+                    data:  {
+                        "name": vm.tpl.name,
+                        "key":vm.tpl.key,
+                    },
+                    success: function (data) {
+                        if (data.result) {
+                            alert("创建成功")
+                        } else {
+                            alert(data.message)
+                        }
+                    }
+                })
+            },
+
+        check_task(tpl) {
+
+        },
+
+
+
+
+        },
+
 
 
         mounted:function () {

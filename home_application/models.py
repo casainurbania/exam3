@@ -21,7 +21,7 @@ from home_application.utils.ex import parse_excel
 #             parse_excel(each.file)
 
 class Template(models.Model):
-    name = models.CharField(verbose_name="模板名称", max_length=64,unique=True)
+    name = models.CharField(verbose_name="模板名称", max_length=64, unique=True)
     type = models.TextField(verbose_name="模板类型")
     # 变更发布  扩容类  上线类 下架类  例行维护
     # bk_biz_id = models.TextField(verbose_name="业务ID")
@@ -41,14 +41,14 @@ class Template(models.Model):
 
 
 class Task(models.Model):
-    task_id = models.IntegerField(verbose_name="任务ID")
+    key = models.CharField(verbose_name="任务识别码", max_length=64, unique=True)
     content = models.TextField(verbose_name="详情", blank=True)
     status = models.TextField(verbose_name="状态", blank=True, null=True)
     # 未操作,操作中,已完成
     template = models.ForeignKey(Template)
     create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True, )
     change_time = models.DateTimeField(verbose_name="更新时间", auto_now=True, blank=True, null=True)
-    operators = models.TextField(verbose_name="可操作者", blank=True, null=True)
+    operators = models.TextField(verbose_name="可操作人", blank=True, null=True)
     creator = models.TextField(verbose_name="创建者", blank=True, null=True)
     other = models.TextField(verbose_name="备注", blank=True, null=True)
 

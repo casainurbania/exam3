@@ -128,19 +128,32 @@ def search_template_list(req):
         'message': u'成功',
         'data': res,
     }
+    print res
     return render_json(resp)
 
 
 # 创建任务 todo
 def create_task(req):
-    id = req.POST['id']
-    creator = req.user.username
+    try:
+        print "=======create_task====="
+        name = req.POST['name']
+        key = req.POST['key']
+        creator = req.user.username
+        tpl = Template.objects.get(name=name)
+        Task.objects.create(creator=creator, key=key, template=tpl)
+        resp = {
+            'result': True,
+            'message': u'成功',
+            'data': None,
+        }
 
-    aim = Template.objects.get(id=id).file
-    print aim
-    Task.objects.create(creator=creator,)
-
-    Task.objects.create()
+    except Exception as e:
+        resp = {
+            'result': False,
+            'message': u'失败: %s' % e,
+            'data': None,
+        }
+    return render_json(resp)
 
 
 # 获取全部用户
