@@ -61,8 +61,12 @@ def add_template(req):
         name = req.POST["name"]
         obj = req.FILES.get("file", None)
 
-        save_path = os.path.join(UPLOAD_PATH, obj.name)
-        print [t.file for t in Template.objects.all()]
+
+        pwd = os.getcwd()
+
+        # father_path = os.path.abspath(os.path.dirname(pwd))
+        save_path = os.path.join( pwd,UPLOAD_DIR, obj.name)
+        print save_path
         if save_path not in [t.file for t in Template.objects.all()]:
             f = open(save_path, 'wb')
             for line in obj.chunks():
