@@ -145,18 +145,26 @@
                 <thead>
                     <tr >
                         <th style="width: 15%;">模板名称</th>
-                        <th style="width: 15%;">业务名称</th>
-                        <th style="width: 15%;">模板类型</th>
-                        <th style="width: 15%;">创建者</th>
+                        <th style="width: 10%;">业务名称</th>
+                        <th style="width: 7%;">模板类型</th>
+                        <th style="width: 7%;">创建者</th>
                         <th style="width: 15%;">创建时间</th>
+                        <th style="width: 7%;">更新者</th>
+                        <th style="width: 16%;">更新时间</th>
                         <th style="width: 25%;">操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="template in template_list">
-                        <td style="width: 15px;">{{ template.name }}</td>
+                        <td style="display: none">{{ template.id }}</td>
+                        <td style="width: 15%;">{{ template.name }}</td>
                         <td style="width: 10%;">{{ template.bk_biz_name }}</td>
-                        <td style="width: 10%;">{{ template.type }}</td>
+                        <td style="width: 7%;">{{ template.type }}</td>
+                        <td style="width: 7%;">{{ template.creator }}</td>
+                        <td style="width: 15%;">{{ template.create_time }}</td>
+                        <td style="width: 7%;">{{ template.changer }}</td>
+                        <td style="width: 16%;">{{ template.change_time }}</td>
+
                         <td>
                             <button class="btn btn-xs btn-success" @click="create_task(template.id)"> <i class="glyphicon glyphicon-ok"></i> </button>
                             <button class="btn btn-xs btn-warning"> <i class="glyphicon glyphicon-edit"></i> </button>

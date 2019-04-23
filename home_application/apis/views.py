@@ -61,11 +61,10 @@ def add_template(req):
         name = req.POST["name"]
         obj = req.FILES.get("file", None)
 
-
         pwd = os.getcwd()
 
         # father_path = os.path.abspath(os.path.dirname(pwd))
-        save_path = os.path.join( pwd,UPLOAD_DIR, obj.name)
+        save_path = os.path.join(pwd, UPLOAD_DIR, obj.name)
         print save_path
         if save_path not in [t.file for t in Template.objects.all()]:
             f = open(save_path, 'wb')
@@ -131,11 +130,18 @@ def search_template_list(req):
     }
     return render_json(resp)
 
+
 # 创建任务 todo
 def create_task(req):
     id = req.POST['id']
     creator = req.user.username
+
+    aim = Template.objects.get(id=id).file
+    print aim
+    Task.objects.create(creator=creator,)
+
     Task.objects.create()
+
 
 # 获取全部用户
 def get_all_user(req):
