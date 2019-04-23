@@ -108,13 +108,13 @@ def search_template_list(req):
     print typ
     print name
     print creator
-    Q_set = Q()
-    Q_set.connector = 'AND'
-    for k, v in {'bk_biz_name': bk_biz_name, 'type': typ, 'name': name,'creator':creator}.items():
+    q_set = Q()
+    q_set.connector = 'AND'
+    for k, v in {'bk_biz_name': bk_biz_name, 'type': typ, 'name': name, 'creator': creator}.items():
         if v is not u"":
-            Q_set.children.append((k, v))
+            q_set.children.append((k, v))
     res = []
-    for t in Template.objects.filter(Q_set):
+    for t in Template.objects.filter(q_set):
         res.append({
             'name': t.name,
             'bk_biz_name': t.bk_biz_name,
@@ -127,13 +127,13 @@ def search_template_list(req):
     }
     return render_json(resp)
 
-
+# 创建任务 todo
 def create_task(req):
     id = req.POST['id']
     creator = req.user.username
     Task.objects.create()
 
-
+# 获取全部用户
 def get_all_user(req):
     res = ESBApi(req).get_all_users()
     res = {
