@@ -97,7 +97,8 @@
                             <div class="form-group clearfix ">
                                 <label class="col-sm-4 control-label bk-lh30 pt0">模板类型：</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control bk-valign-top" v-model="type">
+                                        <select class="form-control bk-valign-top" v-model="type">
+                                        <option value="">---全部---</option>
                                         <option value="变更发布">变更发布</option>
                                         <option value="扩容类">扩容类</option>
                                         <option value="上线类">上线类</option>
@@ -114,8 +115,8 @@
                                 <label class="col-sm-4 control-label bk-lh30 pt0">任务状态：</label>
                                 <div class="col-sm-8">
                                     <select  class="form-control bk-valign-top" v-model="status">
-                                        <option value="全部">---全部---</option>
-                                        <option value="待操作">待操作</option>
+                                        <option value="">---全部---</option>
+                                        <option value="未操作">未操作</option>
                                         <option value="操作中">操作中</option>
                                         <option value="任务完成">已完成</option>
                                     </select>
@@ -133,7 +134,7 @@
                                 <label class="col-sm-4 control-label bk-lh30 pt0">创建人：</label>
                                 <div class="col-sm-8">
                                     <select class="form-control bk-valign-top" v-model="creator">
-                                        <option value="">--全部--</option>
+                                        <option value="">---全部---</option>
                                         <option v-for="user in user_list" :value="user" >{{ user }}</option>
                                     </select>
                                 </div>
