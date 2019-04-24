@@ -36,24 +36,25 @@ def get_all_biz(req):
             }
 
             return render_json(resp)
-
         else:
-            return result
+            resp = {
+                'result': False,
+                'message': '获取业务失败',
+                'data': None,
+            }
 
     except Exception as e:
-        print e
         resp = {
             'result': False,
             'message': u'获取主机信息失败 %s' % e,
             'data': None,
         }
 
-        return render_json(resp)
+    return render_json(resp)
 
 
 
 def add_template(req):
-    print "========= add_template ======="
     try:
         bk_biz_name = req.POST["bk_biz_name"]
         typ = req.POST["type"]
@@ -100,7 +101,6 @@ def add_template(req):
 
 
 def search_template_list(req):
-    print "====== search_template_list ====="
     bk_biz_name = req.POST.get("bk_biz_name", u"")
     typ = req.POST.get("type", u"")
     name = req.POST.get("name", u"")
@@ -133,7 +133,6 @@ def search_template_list(req):
 # 基于模板创建任务 todo
 def create_task(req):
     try:
-        print "=======create_task====="
         name = req.POST['name']
         key = req.POST['key']
         creator = req.user.username
