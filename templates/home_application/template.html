@@ -34,6 +34,10 @@
     <script src="https://magicbox.bk.tencent.com/static_api/v3/assets/echarts-2.0/echarts-all.js"></script>
     <script src="https://magicbox.bk.tencent.com/static_api/v3/assets/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <link href="https://magicbox.bk.tencent.com/static_api/v3/bk/css/bk.css" rel="stylesheet">
+    <link href="https://magicbox.bk.tencent.com/static_api/v3/bk/css/bk.css" rel="stylesheet">
+<link href="https://magicbox.bk.tencent.com/static_api/v3/assets/artDialog-6.0.4/css/ui-dialog.css" rel="stylesheet">
+<script src="https://magicbox.bk.tencent.com/static_api/v3/assets/js/jquery-1.10.2.min.js"></script>
+<script src="https://magicbox.bk.tencent.com/static_api/v3/assets/artDialog-6.0.4/dist/dialog-min.js"></script>
     <!-- 放到蓝鲸开发框架后，请引用csrftoken.js解决jquery下POST请求403问题，如果使用的是mako模板，可以直接去掉下面的注释 -->
     <!--script src="${STATIC_URL}js/csrftoken.js?v=${STATIC_VERSION}" type="text/javascript"></script-->
     <!-- 这个是全局配置，如果需要在js中使用app_id和site_url,则这个javascript片段一定要保留 -->
@@ -169,8 +173,8 @@
 
                         <td>
                             <button class="btn btn-xs btn-success" @click=" pop_up(template)"> <i class="glyphicon glyphicon-ok"></i> </button>
-                            <button class="btn btn-xs btn-warning" @click=" check_task(template)"> <i class="glyphicon glyphicon-edit"></i> </button>
-                            <button class="btn btn-xs btn-danger"   @click=" delete_template(template.id)> <i class="glyphicon glyphicon-remove"></i> </button>
+                            <button class="btn btn-xs btn-warning" @click="check_task(template)"> <i class="glyphicon glyphicon-edit"></i> </button>
+                            <button class="btn btn-xs btn-danger"   @click="delete_template(template.name)"> <i class="glyphicon glyphicon-remove"></i> </button>
                         </td>
                     </tr>
                 </tbody>
@@ -349,6 +353,7 @@
                     success: function (data) {
                         if (data.result) {
                             alert("创建成功")
+                            window.location.href = site_url
                         } else {
                             alert(data.message)
                         }
@@ -356,34 +361,25 @@
                 })
             },
 
-        delete_template(id) {
-            var d = dialog({
-            width: 260,
-            title: '提示',
-            cancel: function (){},
-            ok: function() {
-                $.ajax({
-                    type: "GET",
-                    url: site_url + "api/delete_template",
-                    dataType: "json",
-                    data:  {
-                       "id": id,
-                    },
-                    success: function (data) {
-                        if (data.result) {
-                            alert("创建成功")
-                        } else {
-                            alert(data.message)
-                        }
+        delete_template (name){
+            var vm = this;
+            alert("删除该模板");
+            $.ajax({
+                type: "POST",
+                url: site_url + "api/delete_template",
+                dataType: "json",
+                data:  {
+                    "name":name
+                },
+                success: function (data) {
+                    if (data.result) {
+                        alert("删除成功")
+                        vm.search_template()
+                    } else {
+                        alert(data.message)
                     }
-                })
-
-            },
-            okValue: '确定',
-            content: '<div class="king-notice-box king-notice-warning"><p class="king-notice-text">请输入用户名！</p></div>',
-            cancelValue: '取消',
-        });
-        d.show();
+                }
+            })
         },
 
 

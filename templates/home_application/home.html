@@ -195,8 +195,7 @@
                         <td style="width: 10%;">{{ task.create_time }}</td>
                         <td style="width: 7%;">{{ task.status }}</td>
                         <td>
-                            <button type="button" class="btn btn-xs btn-success" @click="get_task_content(task)"> <i class="glyphicon glyphicon-ok"></i> </button>
-                            <button type="button" class="btn btn-xs btn-warning"> <i class="glyphicon glyphicon-edit"></i> </button>
+                            <button type="button" class="btn btn-xs btn-warning" @click="get_task_content(task)"> <i class="glyphicon glyphicon-edit"></i> </button>
                         </td>
                     </tr>
                 </tbody>
@@ -397,7 +396,6 @@
 
             comfirm(index) {
                 var vm = this;
-                alert(vm.show.curr.key);
                 $.ajax({
                     type: "POST",
                     url: site_url + "api/confirm",
