@@ -162,7 +162,6 @@
                 </thead>
                 <tbody>
                     <tr v-for="template in template_list">
-                        <td style="display: none">{{ template.id }}</td>
                         <td style="width: 15%;">{{ template.name }}</td>
                         <td style="width: 10%;">{{ template.bk_biz_name }}</td>
                         <td style="width: 7%;">{{ template.type }}</td>
@@ -173,7 +172,7 @@
 
                         <td>
                             <button class="btn btn-xs btn-success" @click=" pop_up(template)"> <i class="glyphicon glyphicon-ok"></i> </button>
-                            <button class="btn btn-xs btn-warning" @click="check_task(template)"> <i class="glyphicon glyphicon-edit"></i> </button>
+                            <button class="btn btn-xs btn-warning" @click="down_template(template.id)"> <i class="glyphicon glyphicon-edit"></i> </button>
                             <button class="btn btn-xs btn-danger"   @click="delete_template(template.name)"> <i class="glyphicon glyphicon-remove"></i> </button>
                         </td>
                     </tr>
@@ -363,7 +362,6 @@
 
         delete_template (name){
             var vm = this;
-            alert("删除该模板");
             $.ajax({
                 type: "POST",
                 url: site_url + "api/delete_template",
@@ -382,7 +380,9 @@
             })
         },
 
-
+        down_template(id){
+              window.open(site_url + "api/download_template/"+ id)
+        },
 
 
         },

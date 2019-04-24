@@ -115,7 +115,7 @@
       <div class="form-group">
         <label class="control-label col-sm-2" >上传模板文件</label>
         <div class="col-sm-7">
-            <input name="file"   class="form-control"  type="file">
+            <input name="file"   class="form-control"  type="file" v-model="template.file">
         </div>
     </div>
 
@@ -178,12 +178,13 @@
 
             add_template() {
                  var vm = this;
+                 var formData = new FormData(document.querySelector("form"));//获取form值
                  if (vm.template.bk_biz_name === "" ||
                      vm.template.type==="" ||
-                     vm.template.name===""
+                     vm.template.name===""||
+                      vm.template.file===""
                     ) alert("信息不完整");
                  else{
-                    var formData = new FormData(document.querySelector("form"));//获取form值
                     $.ajax({
                         type: "POST",
                         url: site_url + "api/add_template",

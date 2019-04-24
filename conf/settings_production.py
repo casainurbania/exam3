@@ -19,10 +19,10 @@ from settings import APP_ID
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 默认用mysql
-        'NAME': 'BKDS20190418067_o',  # 数据w库名 (默认与APP_ID相同)
-        'USER': 'root',  # 你的数据库user
-        'PASSWORD': 'L*vIW=.lTr',  # 你的数据库password
-        'HOST': '10.0.3.17',  # 数据库HOST
+        'NAME': 'exam_hx_t',  # 数据w库名 (默认与APP_ID相同)
+        'USER': 'exam_hx_t',  # 你的数据库user
+        'PASSWORD': 'exam_hx_t@2018',  # 你的数据库password
+        'HOST': '192.168.51.51',  # 数据库HOST
         'PORT': '3306',  # 默认3306
     },
 }

@@ -7,7 +7,7 @@ static/apidoc/
 .idea/
 .tmp/
 .vscode/
-
+README
 ## Python Part
 
 # Byte-compiled / optimized / DLL files

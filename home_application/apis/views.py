@@ -117,6 +117,7 @@ def search_template_list(req):
     res = []
     for t in Template.objects.filter(q_set):
         res.append({
+            'id':t.id,
             'name': t.name,
             'bk_biz_name': t.bk_biz_name,
             'type': t.type,
