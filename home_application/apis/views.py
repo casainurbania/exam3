@@ -159,6 +159,7 @@ def create_task(req):
 # 获取全部用户
 def get_all_user(req):
     res = ESBApi(req).get_all_users()
+    print res
     resp = {
         'result': True,
         'message': u'成功',
