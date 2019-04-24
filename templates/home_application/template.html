@@ -143,7 +143,7 @@
 
             <form class="form-vertical p15 tr">
                 <div class="form-group">
-                    <a href="${SITE_URL}add"><button type="button" class="king-btn mr10  king-success" >+ 新增</button></a>
+                    <button type="button" class="king-btn mr10  king-success" @click="jump_add_template">+ 新增</button>
                     <button type="button" class="king-btn king-default " @click="search_template">查询</button>
                 </div>
             </form>
@@ -188,7 +188,7 @@
         </div>
 
         <!-- 弹窗 start -->
- <div class="king-block king-block-bordered" v-if="showCheck" style="position: absolute;top: 50px;left: 25%  ;width: 50%;">
+ <div class="king-block king-block-bordered" v-if="showCheck" style="position: absolute;top: 50px;left: 25%  ;width: 50%;" v-cloak>
     <div class="king-block-header king-gray-light">
         <ul class="king-block-options">
             <li>
@@ -384,10 +384,11 @@
               window.open(site_url + "api/download_template/"+ id)
         },
 
+        jump_add_template(){
+              window.open(site_url + "add")
+        }
 
-        },
-
-
+},
 
         mounted:function () {
             this.getBizList();
