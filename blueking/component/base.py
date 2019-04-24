@@ -17,20 +17,12 @@ class ComponentAPI(object):
     def __init__(self, client, method, path, description='', default_return_value=None):
         host = COMPONENT_SYSTEM_HOST
         # Do not use join, use '+' because path may starts with '/'
-        self.host = host.rstrip('/')
-        self.path = path
-        self.url = ''
+        self.url = host.rstrip('/') + path
         self.client = client
         self.method = method
         self.default_return_value = default_return_value
 
-    def get_url_with_api_ver(self):
-        bk_api_ver = self.client.get_bk_api_ver()
-        sub_path = '/{}'.format(bk_api_ver) if bk_api_ver else ''
-        return self.host + self.path.format(bk_api_ver=sub_path)
-
     def __call__(self, *args, **kwargs):
-        self.url = self.get_url_with_api_ver()
         try:
             return self._call(*args, **kwargs)
         except ComponentAPIException, e:
@@ -63,7 +55,7 @@ class ComponentAPI(object):
             try:
                 json.dumps(data)
             except Exception:
-                raise ComponentAPIException(self, 'Request parameter error (please pass in a dict or json string)')
+                raise ComponentAPIException(self, u"请求参数错误（请传入一个字典或者json字符串）")
 
         # Request remote server
         try:
@@ -71,25 +63,25 @@ class ComponentAPI(object):
         except Exception, e:
             logger.exception('Error occurred when requesting method=%s url=%s',
                              self.method, self.url)
-            raise ComponentAPIException(self, u'Request component error, Exception: %s' % str(e))
+            raise ComponentAPIException(self, u"组件调用出错, Exception: %s" % str(e))
 
         # Parse result
         if resp.status_code != self.HTTP_STATUS_OK:
-            message = 'Request component error, status_code: %s' % resp.status_code
+            message = u"请求出现错误,错误状态：%s" % resp.status_code
             raise ComponentAPIException(self, message, resp=resp)
         try:
             # Parse response
             json_resp = resp.json()
+            request_id = json_resp.pop('request_id', None)
             if not json_resp['result']:
                 # 组件返回错误时，记录相应的 request_id
-                log_message = (u'Component return error message: %(message)s, request_id=%(request_id)s, '
-                               u'url=%(url)s, params=%(params)s, data=%(data)s, response=%(response)s') % {
-                    'request_id': json_resp.get('request_id'),
+                log_message = (u"组件返回错误信息: %(message)s, request_id=%(request_id)s "
+                               u"url=%(url)s params=%(params)s data=%(data)s") % {
+                    'request_id': request_id,
                     'message': json_resp['message'],
                     'url': self.url,
                     'params': params,
-                    'data': data,
-                    'response': resp.text,
+                    'data': data
                 }
                 logger.error(log_message)
 
@@ -98,5 +90,4 @@ class ComponentAPI(object):
                 return self.default_return_value
             return json_resp
         except:
-            raise ComponentAPIException(
-                self, 'Return data format is incorrect, which shall be unified as json', resp=resp)
+            raise ComponentAPIException(self, u"返回数据格式不正确，统一为json.", resp=resp)

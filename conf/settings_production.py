@@ -8,13 +8,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 
-用于正式环境的全局配置
+用于测试环境的全局配置
 """
 from settings import APP_ID
 
 
 # ===============================================================================
-# 数据库设置, 正式环境数据库设置
+# 数据库设置, 测试环境数据库设置
 # ===============================================================================
 DATABASES = {
     'default': {
