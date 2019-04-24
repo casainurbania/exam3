@@ -33,6 +33,7 @@
     <!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
     <script src="https://magicbox.bk.tencent.com/static_api/v3/assets/echarts-2.0/echarts-all.js"></script>
     <script src="https://magicbox.bk.tencent.com/static_api/v3/assets/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+
     <!-- 放到蓝鲸开发框架后，请引用csrftoken.js解决jquery下POST请求403问题，如果使用的是mako模板，可以直接去掉下面的注释 -->
     <!--script src="${STATIC_URL}js/csrftoken.js?v=${STATIC_VERSION}" type="text/javascript"></script-->
     <!-- 这个是全局配置，如果需要在js中使用app_id和site_url,则这个javascript片段一定要保留 -->
@@ -233,11 +234,13 @@
             <td>{{ content.task }}</td>
             <td>{{ content.remark }}</td>
             <td>{{ content.operator }}</td>
-            <td>{{ content.done }}</td>
+            <td>              <button class="btn btn-xs btn-success" title="激活" v-if="content.done">
+                    <i class="glyphicon glyphicon-ok">完成</i>
+                </button></td>
             <td>{{ content.comfirm }}</td>
             <td>{{ content.time }}</td>
             <td>
-                <button class="btn btn-xs btn-warning" @click="comfirm(index)">确认
+                <button class="btn btn-xs btn-warning" @click="comfirm(index)" v-if="!content.done">
                 </button>
             </td>
         </tr>
@@ -276,7 +279,13 @@
                 task_contents: [],
                 show_check:false,
                 content_list:[],
-                key:""  // 传递任务标识符
+                curr:{
+                    bk_biz_name:"",
+                    type:"",
+                    name:"",
+                    key:"",  // 传递任务标识符
+                }
+
 
             },
         },
@@ -343,7 +352,7 @@
             get_task_content(key) {
                 var vm = this;
                 vm.show.show_check = true;
-                vm.show.key = key;
+                vm.show.curr.key = key;
                 $.ajax({
                     type: "GET",
                     url: site_url + "api/get_task_content",
@@ -366,14 +375,14 @@
 
             comfirm(index) {
                 var vm = this;
-                alert(vm.show.key)
+                alert(vm.show.curr.key);
                 $.ajax({
                     type: "POST",
                     url: site_url + "api/confirm",
                     dataType: "json",
                     data: {
                         "index": index,
-                        "key": vm.show.key,
+                        "key": vm.show.curr.key,
                     },
                     success: function (data) {
                         if (data.result) {
