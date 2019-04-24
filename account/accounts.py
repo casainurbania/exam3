@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Tencent is pleased to support the open source community by making 蓝鲸智云(BlueKing) available.
-Copyright (C) 2017 THL A29 Limited, a Tencent company. All rights reserved.
-Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
-You may obtain a copy of the License at http://opensource.org/licenses/MIT
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
-an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and limitations under the License.
-
 账号体系相关的基类Account.
 """
 from django.conf import settings
@@ -39,11 +31,11 @@ class Account(AccountSingleton):
     账号体系相关的基类Account.
     提供通用的账号功能
     """
+
     # 平台验证用户登录态接口
-    BK_LOGIN_VERIFY_URL = "%s/login/accounts/is_login/" % getattr(settings, 'BK_PAAS_INNER_HOST', settings.BK_PAAS_HOST)
+    BK_LOGIN_VERIFY_URL = "%s/login/accounts/is_login/" % settings.BK_PAAS_HOST
     # 平台获取用户信息接口
-    BK_GET_USER_INFO_URL = "%s/login/accounts/get_user/" % getattr(settings, 'BK_PAAS_INNER_HOST',
-                                                                   settings.BK_PAAS_HOST)
+    BK_GET_USER_INFO_URL = "%s/login/accounts/get_user/" % settings.BK_PAAS_HOST
 
     def is_bk_token_valid(self, request):
         """验证用户登录态."""
