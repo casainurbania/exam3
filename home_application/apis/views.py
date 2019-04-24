@@ -5,11 +5,13 @@ import os
 
 from django.db.models import Q
 from django.core import serializers
+from django.forms import model_to_dict
+from django.http import StreamingHttpResponse, HttpResponse
 
 from account.decorators import login_exempt
 from account.models import BkUser
 from common.mymako import render_mako_context, render_json
-from conf.default import APP_ID, UPLOAD_PATH
+from conf.default import APP_ID, UPLOAD_DIR
 from home_application.celery_tasks import *
 from home_application.models import *
 from home_application.models import *
@@ -49,7 +51,6 @@ def get_all_biz(req):
         }
 
         return render_json(resp)
-
 
 
 def add_template(req):
@@ -104,11 +105,7 @@ def search_template_list(req):
     bk_biz_name = req.POST.get("bk_biz_name", u"")
     typ = req.POST.get("type", u"")
     name = req.POST.get("name", u"")
-    creator = req.POST.get("user",u"")
-    print bk_biz_name
-    print typ
-    print name
-    print creator
+    creator = req.POST.get("user", u"")
     q_set = Q()
     q_set.connector = 'AND'
     for k, v in {'bk_biz_name': bk_biz_name, 'type': typ, 'name': name, 'creator': creator}.items():
@@ -164,5 +161,117 @@ def get_all_user(req):
         'result': True,
         'message': u'成功',
         'data': [i['bk_username'] for i in res['data']]
+    }
+    return render_json(resp)
+
+
+# 下载示例模板文件
+def download_sample_template(req):
+    file_obj = open(r'upload/sample.xls', 'rb')
+    response = StreamingHttpResponse(file_obj)
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="sample.xls"'
+    return response
+
+
+# 下载指定模板文件
+def download_template(req,id):
+    file_path = Template.objects.get(id=id).file
+    file_obj = open(file_path, 'rb')
+    print file_path
+    response = StreamingHttpResponse(file_obj)
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="sample.xls"'
+    return response
+
+
+# 搜索任务
+def search_task(req):
+    bk_biz_name = req.GET.get('bk_biz_name', u'')
+    typ = req.GET.get('type', u'')
+    status = req.GET.get('status', u'')
+    creator = req.GET.get('creator', u'')
+    template_name = req.GET.get('template_name', u'')
+    key = req.GET.get('key', u'')
+
+    q_set = Q()
+    q_set.connector = 'AND'
+    for k, v in {'status': status, 'creator': creator, 'key': key, }.items():
+        if v is not u"":
+            q_set.children.append((k, v))
+    res = Task.objects.filter(q_set)
+    res_list = []
+    if bk_biz_name is not u"":
+        res = res.filter(template__bk_biz_name=bk_biz_name)
+    if typ is not u"":
+        res = res.filter(template__type=typ)
+    if template_name is not u"":
+        res = res.filter(template__name=template_name)
+
+    for i in res:
+        res_list.append({
+            'name': i.template.name,
+            'key': i.key,
+            'bk_biz_name': i.template.bk_biz_name,
+            'type': i.template.type,
+            'operators': i.operators,
+            'creator': i.creator,
+            'create_time': '%s' % i.create_time,
+            'status': i.status,
+        })
+
+    resp = {
+        'result': True,
+        'message': u'成功',
+        'data': res_list
+    }
+
+    return render_json(resp)
+
+
+# 查看任务详情
+def get_task_content(req):
+    key = req.GET.get('key')
+    obj = Task.objects.get(key=key)
+    task_contents = json.loads(obj.content)
+    resp = {
+        'result': True,
+        'message': u'成功',
+        'data': task_contents
+    }
+    return render_json(resp)
+
+
+# 点击 确认  完成任务
+def confirm(req):
+    print "=======confirm========"
+    index = int(req.POST["index"])
+    key = req.POST["key"]
+    obj = Task.objects.get(key=key)
+    content = json.loads(obj.content)
+    content[index]['done'] = 1
+    content[index]['comfirm'] = req.user.username
+    content[index]['time'] = time.strftime("%Y-%m-%d %H:%M:%S")
+    obj.content = json.dumps(content)
+    obj.save()
+    resp = {
+        'result': True,
+        'message': u'成功',
+        'data': content
+    }
+    return render_json(resp)
+
+
+# 删除模板
+def delete_template(req):
+    print "=======delete_temp========"
+    name = req.POST["name"]
+    print name
+
+    obj = Template.objects.get(name=name)
+    os.remove(obj.file)
+    obj.delete()
+    resp = {
+        'result': True,
     }
     return render_json(resp)

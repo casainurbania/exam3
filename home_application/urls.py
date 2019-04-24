@@ -25,4 +25,5 @@ urlpatterns = patterns(
     # (r'^api/test/(?P<a>(\w+))/(?P<b>(\w+))/$', 'test'),
     (r'^api/test/', 'test'),
 
+
 )

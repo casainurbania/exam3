@@ -8,12 +8,16 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 """
+import os
+
+from django.http import HttpResponse
+from django.http import StreamingHttpResponse
 
 from common.mymako import render_mako_context, render_json
+from conf.default import UPLOAD_DIR
 
 
 def test(req):
-
     a = req.GET.get("a")
     b = req.GET.get("b")
     resp = {
@@ -37,4 +41,7 @@ def template(req):
 
 
 def add(req):
-    return render_mako_context(req, '/home_application/add.html')
+    return render_mako_context(req, '/home_application/add_template.html')
+
+
+
