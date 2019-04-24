@@ -25,26 +25,28 @@ def parse_excel(path):
     sheet = ex_file.sheet_by_index(0)
 
     # 打印sheet的名称，行数，列数
-
-    print sheet.name
-    print sheet.nrows
-    print sheet.ncols
+    # print sheet.name
+    # print sheet.nrows
+    # print sheet.ncols
 
     # 获取整行或者整列的值
-    task_map = {}
+    task_contents = []
     tasks = sheet.col_values(1)[1:]
     remarks = sheet.col_values(2)[1:]
     operators = sheet.col_values(3)[1:]
 
     for i in range(len(tasks)):
-        task_map[str(i)] = {
+        task_contents.append({
             'task': tasks[i],
             'remark': remarks[i],
             'operator': operators[i],
             'done': 0,
-        }
+            'time': "",
+            'comfirm': "",
 
-    return json.dumps(task_map)
+        })
+
+    return json.dumps(task_contents)
 
     # 获取单元格内容
     #

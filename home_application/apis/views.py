@@ -64,7 +64,6 @@ def add_template(req):
 
         # father_path = os.path.abspath(os.path.dirname(pwd))
         save_path = os.path.join(pwd, UPLOAD_DIR, obj.name)
-        print save_path
         if save_path not in [t.file for t in Template.objects.all()]:
             f = open(save_path, 'wb')
             for line in obj.chunks():
@@ -127,20 +126,20 @@ def search_template_list(req):
         'message': u'成功',
         'data': res,
     }
-    print res
     return render_json(resp)
 
 
-# 创建任务 todo
+# 基于模板创建任务 todo
 def create_task(req):
     try:
         print "=======create_task====="
         name = req.POST['name']
         key = req.POST['key']
         creator = req.user.username
-        tpl = Template.objects.get(name=name).file
-        content = parse_excel(tpl)
-        Task.objects.create(creator=creator, key=key, template=tpl, content=content, status="未操作").save()
+        tpl = Template.objects.get(name=name)
+        path = tpl.file
+        content = parse_excel(path)
+        Task.objects.create(template=tpl, creator=creator, key=key, content=content, status="未操作")
         Task.objects.sync_operators(key=key)
         resp = {
             'result': True,

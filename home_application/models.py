@@ -37,32 +37,26 @@ class Template(models.Model):
 
 class TaskManager(models.Manager):
     # 根据任务现状,同步自身可操作者
-    @classmethod
     def sync_operators(self, key):
         obj = self.get(key=key)
-        map_str = json.loads(obj.content)
+        task_contents = json.loads(obj.content)
         operators = []
         uncomplate = 0
         completed = 0
-        for i in range(len(map_str)):
-            if map_str[str(i)]["done"]:
+        for content in task_contents:
+            if content["done"]:
                 completed += 1
             else:
-                operators.append(map_str[str(i)]["operator"])
+                operators.append(content["operator"])
                 uncomplate += 1
-
-        if  completed>0:
-            if uncomplate==0:
+        if completed > 0:
+            if uncomplate == 0:
                 obj.status = "已完成"
             else:
                 obj.status = "未完成"
         else:
             obj.status = "未操作"
-
-        obj.operators = ",".join(operators)
-        obj.save()
-
-
+        obj.operators = ",".join(list(set(operators)))
         obj.save()
 
 
